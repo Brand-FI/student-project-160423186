@@ -14,13 +14,14 @@ import com.ubayadev.studentproject.model.Student
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
     val studentLD = MutableLiveData<Student>()
+    val errorLD = MutableLiveData<Boolean>()
     private var TAG = "volley_tag"
     private var queue: RequestQueue? = null
 
 
     fun fetch(id: String) {
         val url = "https://www.jsonkeeper.com/b/LLMW"
-
+        errorLD.value = false;
         /*val student1 = Student(
                "16055", "Nonie", "1998/03/28", "5718444778",
                "http://dummyimage.com/75x100.jpg/cc0000/ffffff"
@@ -34,8 +35,14 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
                 studentLD.value = students.find { it.id == id }
             }, {
                 Log.e("volley_status", it.message.toString())
+                errorLD.value = true
             },
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        queue?.cancelAll(TAG)
     }
 }
 
